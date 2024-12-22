@@ -1,0 +1,55 @@
+{
+  "$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v10/terminal-keeper.json",
+  "theme": "tribe",
+  "active": "development",
+  "activateOnStartup": true,
+  "keepExistingTerminals": true,
+  "sessions": {
+    "development": [
+      [
+        {
+          "name": "Django Server",
+          "icon": "server",
+          "color": "terminal.ansiGreen",
+          "commands": [
+            "cd backend && python manage.py runserver"
+          ]
+        },
+        {
+          "name": "Django Shell",
+          "icon": "terminal",
+          "color": "terminal.ansiBlue",
+          "commands": [
+            "cd backend && python manage.py shell"
+          ]
+        }
+      ],
+      [
+        {
+          "name": "Docker",
+          "icon": "docker",
+          "color": "terminal.ansiCyan",
+          "commands": [
+            "docker-compose up"
+          ]
+        },
+        {
+          "name": "Git Status",
+          "icon": "git-branch",
+          "color": "terminal.ansiMagenta",
+          "commands": [
+            "git status"
+          ]
+        }
+      ],
+      {
+        "name": "Python venv",
+        "icon": "package",
+        "color": "terminal.ansiYellow",
+        "commands": [
+          "source .venv/bin/activate"
+        ]
+      }
+    ]
+  }
+}

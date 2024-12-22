@@ -1,7 +1,25 @@
 [project]
 name = "uv-django"
 version = "0.1.0"
-description = "Add your description here"
+description = "sample django project made with uv python package"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "dj-database-url>=2.3.0",
+    "django-cors-headers>=4.6.0",
+    "django>=5.1.4",
+    "django-extensions>=3.2.3",
+    "djangorestframework>=3.15.2",
+    "gunicorn>=23.0.0",
+    "pillow>=11.0.0",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.0.1",
+    "ruff>=0.8.4",
+    "supabase-py>=0.0.2",
+    "whitenoise>=6.8.2",
+    "django-filter>=24.3",
+    "django-widget-tweaks>=1.5.0",
+    "django-taggit>=6.1.0",
+    "django-htmx>=1.21.0",
+    "django-ninja>=1.3.0",
+]
