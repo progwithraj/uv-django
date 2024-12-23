@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+from datetime import timedelta
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -34,7 +35,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', True)
 
 ALLOWED_HOSTS = format_allowed_hosts(os.environ.get('ALLOWED_HOSTS', '127.0.0.1'))
 
-
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
 DJANGO_ENV = os.environ.get('DJANGO_ENV', 'DEV')
 SUPABASE_DB_PASSWORD = os.environ.get("SUPABASE_PROJECT_PASSWORD")
 SUPABASE_DB_URL = os.environ.get("SUPABASE_PROJECT_URI").format(SUPABASE_PROJECT_PASSWORD=SUPABASE_DB_PASSWORD)
@@ -47,11 +48,57 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+THIRD_PARTY_APPS = [
     'dj_database_url',
     'whitenoise',
+    'rest_framework_simplejwt',
     'rest_framework',
     'corsheaders',
 ]
+
+CUSTOM_APPS = [
+    'boards',
+    'myuser'
+]
+
+INSTALLED_APPS.extend(THIRD_PARTY_APPS)
+INSTALLED_APPS.extend(CUSTOM_APPS)
+
+AUTH_USER_MODEL = 'myuser.MyUser'
+
+# CORS_ALLOW_ALL_ORIGINS = True # for development
+CORS_ALLOWED_ORIGINS =[
+    format_cors_origin(host) 
+    for host in os.environ.get('ALLOWED_HOSTS', '127.0.0.1').split(",")
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'content-type',
+]
+APPEND_SLASH = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    # Add these renderer classes
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+}
+
+SIMPLE_JWT = {
+    'SIGNING_KEY': JWT_SECRET_KEY,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -137,7 +184,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -149,14 +195,3 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS_ALLOW_ALL_ORIGINS = True # for development
-CORS_ALLOWED_ORIGINS =[
-    format_cors_origin(host) 
-    for host in os.environ.get('ALLOWED_HOSTS', '127.0.0.1').split(",")
-]
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    'content-type',
-]
-
-APPEND_SLASH = False
